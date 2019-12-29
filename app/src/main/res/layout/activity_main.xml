@@ -40,6 +40,27 @@
         android:id="@+id/btn_sm2_decrypt"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWrite"
+        android:layout_marginTop="10dp"
+        android:text="@string/app_sm2_enc_old"
+        android:id="@+id/btn_sm2_encrypt_old"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWrite"
+        android:layout_marginTop="10dp"
+        android:text="@string/app_sm2_dec_old"
+        android:id="@+id/btn_sm2_decrypt_old"
+        />
+
+
 
     <Button
         android:layout_width="match_parent"
@@ -119,6 +140,16 @@
         android:layout_marginTop="10dp"
         android:text="@string/app_base64_dec"
         android:id="@+id/btn_base64_dec"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWrite"
+        android:layout_marginTop="10dp"
+        android:text="@string/app_random_dec"
+        android:id="@+id/btn_random_dec"
         />
 
 

@@ -21,7 +21,8 @@
 int sm2_encrypt_data(const unsigned char *message,
                           const int message_len,
 			  const unsigned char *pub_key,
-			  unsigned char *output
+			  unsigned char *output,
+			  const int type
 			  )
 {
 
@@ -258,9 +259,17 @@ int sm2_encrypt_data(const unsigned char *message,
 	}
 
 	//由于新版本使用C1C2C3规范排序,C1长度65，C3长度32,C2长度与明文长度相等
-    memcpy(output, c1, 65);
-    memcpy(output + 65, c2, message_len);
-    memcpy(output + 65 + message_len, c3, 32);
+    if(type == SM2_ENCRYPT_C1C2C3) {
+		memcpy(output, c1, 65);
+		memcpy(output + 65, c2, message_len);
+		memcpy(output + 65 + message_len, c3, 32);
+	}else{
+		//兼容老的C1C3C2模式
+        LOGD("兼容老的C1C3C2模式\n");
+		memcpy(output, c1, 65);
+		memcpy(output + 65, c3, 32);
+		memcpy(output + 65 + 32, c2, message_len);
+    }
 
 	error_code = 0;
 	

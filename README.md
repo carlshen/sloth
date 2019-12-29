@@ -3,6 +3,8 @@
 
 ### 简介
 sloth是基于开源跨平台加解密库openssl实现的一系列加解密算法API，本项目工程适用于Android项目,兼容arm,x86平台；
+最低版本21，Android5.1
+
 
 ### 导入SDK
 
@@ -18,7 +20,7 @@ repositories {
 ```
 
 dependencies {
-      compile 'com.bulinbulin:sloth:1.0.0'
+      compile 'com.bulinbulin:sloth:1.0.3'
     }
 
 ```
@@ -39,10 +41,10 @@ public native KeyPairInfo createKeyPair();
 /**
  * sm2加密算法，以C1C2C3模式拼接返回，采用推荐曲线
  * @param data  需要加密内容
- * @param key   加密的公钥，长度为64字节
+ * @param key   加密的公钥，长度为65字节
  * @return      加密后经过hex编码后返回
  */
-public native byte[] sm2Encrypt(String data, byte[] key);
+public native byte[] sm2Encrypt(byte[] data, byte[] key);
 ```
 
 ```
@@ -54,6 +56,29 @@ public native byte[] sm2Encrypt(String data, byte[] key);
  */
 public native byte[] sm2Decrypt(String data, byte[] key);
 ```
+
+
+```
+/**
+ * sm2加密算法，以C1C3C2模式拼接返回，采用推荐曲线
+ * @param data  需要加密内容
+ * @param key   加密的公钥，长度为65字节
+ * @return      加密后经过hex编码后返回
+ */
+public native byte[] sm2EncryptOld(byte[] data, byte[] key);
+```
+
+```
+/**
+ * sm2加密算法，以C1C3C2拼接传入，采用推荐曲线
+ * @param data  需要解密的数据，此数据方法内部进行hex解码
+ * @param key   解密的私钥，长度为32字节
+ * @return  解密后的数据，以byte数组返回
+ */
+public native byte[] sm2DecryptOld(String data, byte[] key);
+```
+
+
 
 ```
 /**

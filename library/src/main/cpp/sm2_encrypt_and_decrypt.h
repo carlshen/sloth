@@ -7,6 +7,10 @@
     ciphertext functions
 **************************************************/
 
+#define SM2_ENCRYPT_C1C2C3     1
+#define SM2_ENCRYPT_C1C3C2     2
+
+
 #ifndef HEADER_SM2_ENCRYPT_AND_DECRYPT_COMPUTATION_H
   #define HEADER_SM2_ENCRYPT_AND_DECRYPT_COMPUTATION_H
 
@@ -49,7 +53,7 @@
 **************************************************/
 int sm2_encrypt_data(const unsigned char *message,
                           const int message_len,
-			  const unsigned char *pub_key,unsigned char *output);
+			  const unsigned char *pub_key,unsigned char *output,const int type);
 
 /**************************************************
 * Name: sm2_encrypt_data

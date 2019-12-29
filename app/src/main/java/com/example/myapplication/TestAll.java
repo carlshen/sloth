@@ -20,11 +20,11 @@ public class TestAll {
         String prik = keyPairInfo.getPrik();
 
         //*********************sm2公钥加密*************************
-        String text = "1234567890";
+        String text = "1234567890未知";
 
         long time = System.currentTimeMillis();
 
-        byte[] encText =  new SecurityUtil().sm2Encrypt(text,new SecurityUtil().hexDecode(pubk));
+        byte[] encText =  new SecurityUtil().sm2Encrypt(text.getBytes(),new SecurityUtil().hexDecode(pubk));
 
         TimeUtil.timeLog("sm2 encrypt time -->",time);
 

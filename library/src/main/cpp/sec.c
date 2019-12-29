@@ -15,7 +15,7 @@
 #include "base64.h"
 #include <stddef.h>
 #include <memory.h>
-
+#include <signal.h>
 
 JNIEXPORT jobject JNICALL
 Java_com_bulinbulin_security_SecurityUtil_createKeyPair(JNIEnv *env, jobject instance){
@@ -61,13 +61,12 @@ Java_com_bulinbulin_security_SecurityUtil_createKeyPair(JNIEnv *env, jobject ins
 }
 
 
+jbyteArray sm2Encrypt(JNIEnv *env, jobject instance, jbyteArray input_,jbyteArray key_,int type){
 
-JNIEXPORT jbyteArray JNICALL
-Java_com_bulinbulin_security_SecurityUtil_sm2Encrypt(JNIEnv *env, jobject instance, jstring input_,jbyteArray key_) {
 
-    const char *input = (*env)->GetStringUTFChars(env,input_, 0);
+    const char *input = (*env)->GetByteArrayElements(env,input_, 0);
 
-    int input_len = (*env)->GetStringLength(env,input_);
+    int input_len = (*env)->GetArrayLength(env,input_);
 
     const char *key  = (*env)->GetByteArrayElements(env,key_, 0);
 
@@ -85,7 +84,7 @@ Java_com_bulinbulin_security_SecurityUtil_sm2Encrypt(JNIEnv *env, jobject instan
 
     memset(output,0x00,encryptLen+1);
 
-    if ( error_code = sm2_encrypt_data(input,input_len,key,output) )
+    if ( error_code = sm2_encrypt_data(input,input_len,key,output,type) )
     {
         LOGD("Create SM2 ciphertext failed!%d\n",error_code);
         goto clean_up;
@@ -105,14 +104,14 @@ Java_com_bulinbulin_security_SecurityUtil_sm2Encrypt(JNIEnv *env, jobject instan
         (*env)->SetByteArrayRegion(env,retByte, 0, encryptLen*2, (jbyte *)hex_sha);
     }
 
-clean_up:
+    clean_up:
     if (input)
     {
-        free(input);
+        free((void *) input);
     }
 
     if(key){
-        free(key);
+        free((void *) key);
     }
 
     if(output){
@@ -127,9 +126,27 @@ clean_up:
 }
 
 
+
+
+
+
+
+
+
+
 JNIEXPORT jbyteArray JNICALL
-Java_com_bulinbulin_security_SecurityUtil_sm2Decrypt(JNIEnv *env, jobject instance, jstring input_,
-                                                   jbyteArray key_) {
+Java_com_bulinbulin_security_SecurityUtil_sm2Encrypt(JNIEnv *env, jobject instance, jbyteArray input_,jbyteArray key_) {
+    return sm2Encrypt(env,instance,input_,key_,SM2_ENCRYPT_C1C2C3);
+}
+
+JNIEXPORT jbyteArray JNICALL
+Java_com_bulinbulin_security_SecurityUtil_sm2EncryptOld(JNIEnv *env, jobject instance, jbyteArray input_,jbyteArray key_) {
+    return sm2Encrypt(env,instance,input_,key_,SM2_ENCRYPT_C1C3C2);
+}
+
+
+jbyteArray sm2Decrypt(JNIEnv *env, jobject instance, jstring input_,jbyteArray key_,int type){
+
     const char *input = (*env)->GetStringUTFChars(env,input_, 0);
 
     int input_len = (*env)->GetStringLength(env,input_);
@@ -154,9 +171,14 @@ Java_com_bulinbulin_security_SecurityUtil_sm2Decrypt(JNIEnv *env, jobject instan
     memset(plaintext,0x00,resultLen+1);
 
     memcpy(c1,output,65);
-    memcpy(c2,output+65,resultLen);
 
-    memcpy(c3,output+65+resultLen,32);
+    if(type == SM2_ENCRYPT_C1C2C3) {
+        memcpy(c2, output + 65, resultLen);
+        memcpy(c3, output + 65 + resultLen, 32);
+    }else{
+        memcpy(c3, output + 65 , 32);
+        memcpy(c2, output + 65 + 32, resultLen);
+    }
 
     jbyteArray retByte = (*env)->NewByteArray(env,resultLen);
 
@@ -174,7 +196,7 @@ Java_com_bulinbulin_security_SecurityUtil_sm2Decrypt(JNIEnv *env, jobject instan
         (*env)->SetByteArrayRegion(env,retByte, 0, resultLen, (jbyte *)plaintext);
     }
 
-clean_up:
+    clean_up:
 
     (*env)->ReleaseStringUTFChars(env,input_, input);
     (*env)->ReleaseByteArrayElements(env,key_, key, 0);
@@ -183,6 +205,21 @@ clean_up:
 }
 
 
+
+
+
+JNIEXPORT jbyteArray JNICALL
+Java_com_bulinbulin_security_SecurityUtil_sm2Decrypt(JNIEnv *env, jobject instance, jstring input_,
+                                                   jbyteArray key_) {
+    return sm2Decrypt(env,instance,input_,key_,SM2_ENCRYPT_C1C2C3);
+}
+
+
+JNIEXPORT jbyteArray JNICALL
+Java_com_bulinbulin_security_SecurityUtil_sm2DecryptOld(JNIEnv *env, jobject instance, jstring input_,
+                                                     jbyteArray key_) {
+    return sm2Decrypt(env,instance,input_,key_,SM2_ENCRYPT_C1C3C2);
+}
 
 JNIEXPORT jstring JNICALL
 Java_com_bulinbulin_security_SecurityUtil_sm3(JNIEnv *env, jobject instance,jbyteArray srcjStr){
@@ -468,4 +505,27 @@ Java_com_bulinbulin_security_SecurityUtil_base64Decode(JNIEnv *env, jobject inst
     }
     (*env)->ReleaseByteArrayElements(env,data_, unicodeDataChar, 0);
     return retByte;
+}
+
+
+
+JNIEXPORT jstring JNICALL
+Java_com_bulinbulin_security_SecurityUtil_random(JNIEnv *env, jobject instance, jint len) {
+
+
+    BIGNUM *bn;
+
+    bn = BN_new(); //生成一个BIGNUM结构
+    int top = -1;
+    int bottom = 1;
+
+    BN_rand(bn, len*8, top, bottom); //生成指定bits的随机数
+
+    char *a = BN_bn2hex(bn); //转化成16进制字符串
+
+    //puts(a);
+
+    BN_free(bn); //释放BIGNUM结构
+
+    return (*env)->NewStringUTF(env, a);
 }

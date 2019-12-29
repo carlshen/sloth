@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
                 String pubk = "0484A60AFF420D9BA6223594C877F1BD2143D25CAB015D746B3DF3246A62847706FB9AD5ADA27A37058CEF91D73C6CD2032302B85E833B6CB9C06C5089BEF950E7";
 
-                String text = "1234567890";
+                String text = "1234567890未知";
 
                 long time = System.currentTimeMillis();
 
-                byte[] encText =  new SecurityUtil().sm2Encrypt(text,new SecurityUtil().hexDecode(pubk));
+                byte[] encText =  new SecurityUtil().sm2Encrypt(text.getBytes(),new SecurityUtil().hexDecode(pubk));
 
                 TimeUtil.timeLog("sm2 encrypt time -->",time);
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String prik = "1543A76B61C474E18FAF6AFF78F1BFB5B0CE80409850DDD1F4CB7F823834EA0B";
 
-                String encText = "0404EBFC718E8D1798620432268E77FEB6415E2EDE0E073C0F4F640ECD2E149A73E858F9D81E5430A57B36DAAB8F950A3C64E6EE6A63094D99283AFF767E124DF0AB5144E5AA88A3FEF8E2605A30BD58FE33BE2C14064DD4D27195D523C29C7C40E8BBB435CB1981700B17";
+                String encText = "0404EBFC718E8D1798620432268E77FEB6415E2EDE0E073C0F4F640ECD2E149A73E858F9D81E5430A57B36DAAB8F950A3C64E6EE6A63094D99283AFF767E124DF0AB5144E5AA88A3FEF8E20135AE27761ADBE5EA2311AD9C2519D58E0A95BC6439AACCEF7834189AB099E9C0EE8AD084EB";
 
                 long time1 = System.currentTimeMillis();
 
@@ -77,6 +77,56 @@ public class MainActivity extends AppCompatActivity {
                 show(new String(data));
             }
         });
+
+
+        //SM2加密
+        findViewById(R.id.btn_sm2_encrypt_old).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                String pubk = "0484A60AFF420D9BA6223594C877F1BD2143D25CAB015D746B3DF3246A62847706FB9AD5ADA27A37058CEF91D73C6CD2032302B85E833B6CB9C06C5089BEF950E7";
+
+                String text = "123123";
+
+                long time = System.currentTimeMillis();
+
+                byte[] encText =  new SecurityUtil().sm2EncryptOld(text.getBytes(),new SecurityUtil().hexDecode(pubk));
+
+                TimeUtil.timeLog("sm2 encrypt time -->",time);
+
+                Log.w("text-size->",""+encText.length);
+
+                Log.w(TAG,"sm2_[C1C3C2]->"+new String(encText));
+
+                show(new String(encText));
+
+            }
+        });
+
+        //sm2解密
+        findViewById(R.id.btn_sm2_decrypt_old).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String prik = "1543A76B61C474E18FAF6AFF78F1BFB5B0CE80409850DDD1F4CB7F823834EA0B";
+
+                String encText = "0404EBFC718E8D1798620432268E77FEB6415E2EDE0E073C0F4F640ECD2E149A73E858F9D81E5430A57B36DAAB8F950A3C64E6EE6A63094D99283AFF767E124DF0DBE5EA2311AD9C2519D58E0A95BC6439AACCEF7834189AB099E9C0EE8AD084EBAB5144E5AA88A3FEF8E20135AE27761A";
+
+                long time1 = System.currentTimeMillis();
+
+                byte[] data =  new SecurityUtil().sm2DecryptOld(encText,new SecurityUtil().hexDecode(prik));
+
+                TimeUtil.timeLog("sm2 decrypt time -->",time1);
+
+                Log.w(TAG,"test_sm2_decrypt[C1C3C2]->"+new String(data));
+
+                show(new String(data));
+            }
+        });
+
+
+
 
         //sm3加密
         findViewById(R.id.btn_sm3_enc).setOnClickListener(new View.OnClickListener() {
@@ -239,6 +289,26 @@ public class MainActivity extends AppCompatActivity {
                 show(new String(base64Decode));
             }
         });
+
+        //随机数生成
+        findViewById(R.id.btn_random_dec).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                long time9 = System.currentTimeMillis();
+
+                String randomStr = new SecurityUtil().random(16);
+
+                TimeUtil.timeLog("randomStr time -->",time9);
+
+                Log.w("test_randomStr->",randomStr);
+
+                show(randomStr);
+            }
+        });
+
+
+
 
 
 

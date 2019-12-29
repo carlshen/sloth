@@ -61,9 +61,7 @@ int test_with_input_defined_in_standard(void)
 
 	unsigned char *output;
 
-	if ( error_code = sm2_encrypt_data(msg,
-	                                        msg_len,
-						pub_key,output) )
+	if ( error_code = sm2_encrypt_data(msg,msg_len,pub_key,output,SM2_ENCRYPT_C1C2C3) )
 	{
 		LOGD("Create SM2 ciphertext by using input defined in standard failed!\n");
 		free(c2);
@@ -195,7 +193,7 @@ int test_sm2_encrypt_and_decrypt(void)
 	}
 	unsigned char *output = malloc(msg_len+97+1);
 	memset(output,0x00,msg_len+97+1);
-	if ( error_code = sm2_encrypt_data(msg,msg_len,key_pair.pub_key,output) )
+	if ( error_code = sm2_encrypt_data(msg,msg_len,key_pair.pub_key,output,SM2_ENCRYPT_C1C2C3) )
 	{
 		LOGD("Create SM2 ciphertext failed!\n");
 		free(c2);
