@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
 
+    <string name="app_test_all">测试所有例子</string>
     <string name="app_key_pair">生成公私钥</string>
     <string name="app_sm2_enc">sm2公钥加密[C1C2C3]</string>
     <string name="app_sm2_dec">sm2私钥解密[C1C2C3]</string>

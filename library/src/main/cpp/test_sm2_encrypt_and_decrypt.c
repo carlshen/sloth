@@ -137,13 +137,13 @@ int test_with_input_defined_in_standard(void)
 	LOGD("Input message:\n");
 	for (i = 0; i < msg_len; i++)
 	{
-		LOGD("0x%x  ", msg[i]);
+		LOGD("0x%02x  ", msg[i]);
 	}
 	LOGD("\n");
 	LOGD("Decrypted message:\n");
 	for (i = 0; i < msg_len; i++)
 	{
-		LOGD("0x%x  ", plaintext[i]);
+		LOGD("0x%02x  ", plaintext[i]);
 	}
 	LOGD("\n");
 	LOGD("Decrypt SM2 ciphertext by using private key defined in standard succeeded!\n");
@@ -175,13 +175,13 @@ int test_sm2_encrypt_and_decrypt(void)
 	LOGD("test Private key:\n");
 	for (i = 0; i < sizeof(key_pair.pri_key); i++)
 	{
-		LOGD("0x%x  ", key_pair.pri_key[i]);
+		LOGD("0x%02x  ", key_pair.pri_key[i]);
 	}
 	LOGD("\n\n");
 	LOGD("Public key:\n");
 	for (i = 0; i < sizeof(key_pair.pub_key); i++)
 	{
-		LOGD("0x%x  ", key_pair.pub_key[i]);
+		LOGD("0x%02x  ", key_pair.pub_key[i]);
 	}
 	LOGD("\n\n");
 
@@ -205,13 +205,13 @@ int test_sm2_encrypt_and_decrypt(void)
 	LOGD("C1 component:\n");
 	for (i = 0; i < sizeof(c1); i++)
 	{
-		LOGD("0x%x  ", c1[i]);
+		LOGD("0x%02x  ", c1[i]);
 	}
 	LOGD("\n\n");
 	LOGD("C3 component:\n");
 	for (i = 0; i < sizeof(c3); i++)
 	{
-		LOGD("0x%x  ", c3[i]);
+		LOGD("0x%02x  ", c3[i]);
 	}
 	LOGD("\n\n");
 	LOGD("Message: %s\n", msg);
@@ -220,7 +220,7 @@ int test_sm2_encrypt_and_decrypt(void)
 	LOGD("C2 component:\n");
 	for (i = 0; i < msg_len; i++)
 	{
-		LOGD("0x%x  ", c2[i]);
+		LOGD("0x%02x  ", c2[i]);
 	}
 	//将数据转换为C1，C2，C3
 	unsigned char *cipherText = malloc(108);
@@ -243,7 +243,7 @@ int test_sm2_encrypt_and_decrypt(void)
 
     for (i = 0; i < 107; i++)
     {
-        LOGD("0x%x  ", cipherText[i]);
+        LOGD("0x%02x  ", cipherText[i]);
     }
 	LOGD("\n\n");
 

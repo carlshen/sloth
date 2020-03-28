@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bulinbulin.security.KeyPairInfo;
@@ -13,6 +14,7 @@ import com.bulinbulin.security.SecurityUtil;
 public class MainActivity extends AppCompatActivity {
 
     private String TAG = "MainActivity";
+    private TextView tvLog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +22,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //检测所有加解密算法
-        new TestAll().test();
+//        new TestAll().test();
 
+        tvLog = (TextView) findViewById(R.id.tv_log);
+        //测试所有例子
+        findViewById(R.id.btn_test_all).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TestAll testAll = new TestAll();
+                testAll.test(tvLog);
+            }
+        });
         //国密公私钥生成
         findViewById(R.id.btn_key_pair).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,7 +326,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show(String text){
-        Toast.makeText(this,"success->"+text,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,"success->"+text,Toast.LENGTH_SHORT).show();
+        if (tvLog != null) {
+            tvLog.setText("success->"+text);
+        }
     }
 
 
