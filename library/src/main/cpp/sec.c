@@ -8,7 +8,7 @@
 #include "log.h"
 #include "test_sm2_encrypt_and_decrypt.h"
 #include "sm2_encrypt_and_decrypt.h"
-#include "hex.h"
+#include "hex2str.h"
 #include "sm2_create_key_pair.h"
 #include "md5.h"
 #include "sm4.h"
@@ -48,11 +48,11 @@ Java_com_bulinbulin_security_SecurityUtil_createKeyPair(JNIEnv *env, jobject ins
     //将公钥与私钥转换成十六进制
     unsigned char *pubkHex = malloc(130+1);
     memset(pubkHex,0x00,131);
-    hexEncode(key_pair.pub_key,65,pubkHex);
+    hex2strEncode(key_pair.pub_key,65,pubkHex);
 
     unsigned char *prikHex = malloc(64+1);
     memset(prikHex,0x00,65);
-    hexEncode(key_pair.pri_key,32,prikHex);
+    hex2strEncode(key_pair.pri_key,32,prikHex);
     //赋值对象进行返回
     (*env)->SetObjectField(env, paramOut, pubk, (*env)->NewStringUTF(env,pubkHex));
     (*env)->SetObjectField(env, paramOut, prik, (*env)->NewStringUTF(env,prikHex));
@@ -95,7 +95,7 @@ jbyteArray sm2Encrypt(JNIEnv *env, jobject instance, jbyteArray input_,jbyteArra
 
     memset(hex_sha,0x00,encryptLen*2+1);
 
-    hexEncode(output,encryptLen,hex_sha);
+    hex2strEncode(output,encryptLen,hex_sha);
 
     LOGD("hexStrss->%d",strlen(hex_sha));
 
@@ -156,7 +156,7 @@ jbyteArray sm2Decrypt(JNIEnv *env, jobject instance, jstring input_,jbyteArray k
     //解密hex
     unsigned char *output = malloc(input_len/2+1);
     memset(output,0x00,input_len/2+1);
-    int len = hexDecode(input,output);
+    int len = hex2strDecode(input,output);
     LOGD("len->%d",len);
     //取出C1，C2，C3
     unsigned char c1[65], c3[32];
@@ -430,7 +430,7 @@ Java_com_bulinbulin_security_SecurityUtil_hexEncode(JNIEnv *env, jobject instanc
     //开辟控件进行编码
     unsigned char* output = (unsigned char *) malloc(inputLen*2+1);
     memset(output,0x00,inputLen*2+1);
-    hexEncode(data,inputLen,output);
+    hex2strEncode(data,inputLen,output);
     (*env)->ReleaseByteArrayElements(env, data_, data, 0);
     return (*env)->NewStringUTF(env, output);
 }
@@ -445,7 +445,7 @@ Java_com_bulinbulin_security_SecurityUtil_hexDecode(JNIEnv *env, jobject instanc
     //开辟控件进行解码
     unsigned char* output = (unsigned char *) malloc(resultLen + 1);
     memset(output,0x00,resultLen + 1);
-    hexDecode(data,output);
+    hex2strDecode(data,output);
     (*env)->ReleaseStringUTFChars(env, data_, data);
 
     jbyteArray retByte = (*env)->NewByteArray(env,resultLen);

@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
              src/main/cpp/sec.c
              src/main/cpp/md5.c
              src/main/cpp/hex.c
+             src/main/cpp/hex2str.c
              src/main/cpp/sm4.c
              src/main/cpp/base64.c
              src/main/cpp/test_demo.c
