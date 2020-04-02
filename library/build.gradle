@@ -53,5 +53,5 @@ publish {
     artifactId = 'sloth'//项目名称
     publishVersion = '1.0.4'//版本号
     desc = 'the first time uploading'//描述，不重要
-    website = 'https://github.com/smallbuer/sloth'//网站，不重要；尽量模拟github上的地址
+    website = 'https://github.com/carlshen/sloth'//网站，不重要；尽量模拟github上的地址
 }

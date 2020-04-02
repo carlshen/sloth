@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">MySloth</string>
 
     <string name="app_test_all">测试所有例子</string>
     <string name="app_key_pair">生成公私钥</string>
